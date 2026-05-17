@@ -1,0 +1,24 @@
+services:
+  speedtest-monitor:
+    build: .
+    image: speedtest-monitor:latest
+    container_name: speedtest-monitor
+
+    # Restart automatically whenever the system boots or Docker restarts
+    restart: always
+
+    environment:
+      - DATA_DIR=/data
+      - INTERVAL_MINUTES=5      # change to 1, 10, 30, 60 as needed
+
+    volumes:
+      # Bind-mount: ./data on the host ↔ /data inside the container
+      # Results (CSVs, PNGs, logs) are written here and visible from the host.
+      - ./data:/data
+
+    # Optional: give the container a readable name in logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
